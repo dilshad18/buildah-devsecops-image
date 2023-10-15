@@ -1,10 +1,11 @@
-FROM fedora:latest
 # Add metadata labels
 LABEL maintainer="ahmad.mdilshad@gmail.com" \
       version="1.0" \
       description="Custom buildah image with Trivy"
 
-RUN dnf -y install buildah fuse-overlayfs awscli --exclude container-selinux && \
+# Update the base image and install necessary packages
+FROM fedora:latest
+RUN dnf -y install buildah fuse-overlayfs awscli tar gzip && \
     dnf clean all
 
 # Install Trivy with a specific version (adjust the URL)
@@ -18,3 +19,14 @@ RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers && \
     touch /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock
 
 ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
+
+# Download and install gitleaks
+WORKDIR /tmp
+RUN curl -L -o gitleaks.tar.gz https://github.com/zricethezav/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz && \
+    tar -zxvf gitleaks.tar.gz && \
+    mv gitleaks /usr/local/bin && \
+    rm gitleaks.tar.gz
+
+# Set the working directory to /
+WORKDIR /
+
