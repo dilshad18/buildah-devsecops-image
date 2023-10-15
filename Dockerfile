@@ -1,10 +1,10 @@
 FROM fedora:latest
 # Add metadata labels
-LABEL maintainer="whiz-devops@whiz.ai" \
+LABEL maintainer="ahmad.mdilshad@gmail.com" \
       version="1.0" \
       description="Custom buildah image with Trivy"
 
-RUN dnf -y install buildah fuse-overlayfs --exclude container-selinux && \
+RUN dnf -y install buildah fuse-overlayfs awscli --exclude container-selinux && \
     dnf clean all
 
 # Install Trivy with a specific version (adjust the URL)
