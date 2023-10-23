@@ -5,7 +5,7 @@ LABEL maintainer="ahmad.mdilshad@gmail.com" \
 
 # Update the base image and install necessary packages
 FROM fedora:latest
-RUN dnf -y install buildah fuse-overlayfs awscli tar gzip && \
+RUN dnf -y install buildah fuse-overlayfs awscli git tar gzip && \
     dnf clean all
 
 # Install Trivy with a specific version (adjust the URL)
