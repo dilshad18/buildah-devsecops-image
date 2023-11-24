@@ -1,15 +1,11 @@
-# Add metadata labels
-LABEL maintainer="ahmad.mdilshad@gmail.com" \
-      version="1.0" \
-      description="Custom buildah image with Trivy"
 
 # Update the base image and install necessary packages
 FROM fedora:latest
-RUN dnf -y install buildah fuse-overlayfs awscli git tar gzip && \
+RUN dnf -y install buildah fuse-overlayfs awscli git tar python-pip python gzip && \
     dnf clean all
 
 # Install Trivy with a specific version (adjust the URL)
-RUN rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.rpm
+RUN rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.rpm && pip3 install semgrep
 
 # Set short-name-mode to permissive
 RUN sed -i 's/short-name-mode="enforcing"/short-name-mode="permissive"/' /etc/containers/registries.conf
@@ -29,4 +25,3 @@ RUN curl -L -o gitleaks.tar.gz https://github.com/zricethezav/gitleaks/releases/
 
 # Set the working directory to /
 WORKDIR /
-
